@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+/*import { RouterLink, RouterView } from 'vue-router'*/
+/*import HelloWorld from './components/HelloWorld.vue'*/
+import NavBar from './components/NavBar.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <NavBar/>
+    <img/>
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <!-- <RouterLink </RouterLink>
+        <RouterLink </RouterLink> -->
       </nav>
     </div>
   </header>
@@ -24,6 +25,7 @@ import HelloWorld from './components/HelloWorld.vue'
 header {
   line-height: 1.5;
   max-height: 100vh;
+  padding-top: 8rem;
 }
 
 .logo {
@@ -58,28 +60,27 @@ nav a:first-of-type {
 
 @media (min-width: 1024px) {
   header {
-    display: flex;
+    display: block;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    padding-right: 0;
   }
 
   .logo {
-    margin: 0 2rem 0 0;
+    margin: 0 auto 2rem;
   }
 
   header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    display: block;
+    place-items: center;
+    flex-wrap: nowrap;
   }
 
   nav {
-    text-align: left;
-    margin-left: -1rem;
+    text-align: center;
+    margin-left: 0;
     font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+    padding: 0;
+    margin-top: 0;
   }
 }
 </style>
