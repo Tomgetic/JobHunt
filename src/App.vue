@@ -1,86 +1,36 @@
 <script setup lang="ts">
-/*import { RouterLink, RouterView } from 'vue-router'*/
-/*import HelloWorld from './components/HelloWorld.vue'*/
 import NavBar from './components/NavBar.vue'
+import { onMounted, ref } from 'vue'
+
+const pageContent = ref(null)
+
+onMounted(() => {
+  // Invocado depois da página carregar (mounted) - Desencadeia transição: opacidade de 0 para 100 e desloca na vertical
+  requestAnimationFrame(() => {
+    pageContent.value.classList.remove('opacity-0', 'translate-y-4')
+    pageContent.value.classList.add('opacity-100', 'translate-y-0')
+  })
+})
 </script>
 
 <template>
-  <header>
-    <NavBar/>
-    <img/>
+  <div class="min-h-screen bg-gray-100">
+    <!-- Navbar as a component -->
+    <NavBar />
 
-    <div class="wrapper">
-
-      <nav>
-        <!-- <RouterLink </RouterLink>
-        <RouterLink </RouterLink> -->
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    <!-- Conteúdo da página com transição quando carrega: Começa escondido (opacity-0) e ligeiramente deslocado para baixo (translate-y-4)
+         Quando página carrega (onMounted) troca estas classes por opacity-100 e translate-y-0
+         Transição é controlada por: "transition-all duration-1000 ease-out"
+    -->
+    <main
+      ref="pageContent"
+      class="opacity-0 translate-y-4 transition-all duration-1000 ease-out p-6"
+    >
+      <router-view />
+    </main>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-  padding-top: 8rem;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: block;
-    place-items: center;
-    padding-right: 0;
-  }
-
-  .logo {
-    margin: 0 auto 2rem;
-  }
-
-  header .wrapper {
-    display: block;
-    place-items: center;
-    flex-wrap: nowrap;
-  }
-
-  nav {
-    text-align: center;
-    margin-left: 0;
-    font-size: 1rem;
-    padding: 0;
-    margin-top: 0;
-  }
-}
+<style>
+/* Optional global styles */
 </style>
