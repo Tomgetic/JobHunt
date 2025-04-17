@@ -1,4 +1,4 @@
-<!-- src/views/Home.vue -->
+<!-- src/views/HomePage.vue -->
 <template>
   <section class="max-w-3xl mx-auto text-center py-20">
     <h2 class="text-4xl font-bold text-blue-600 mb-4">Available Jobs</h2>

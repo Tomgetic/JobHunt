@@ -1,4 +1,4 @@
-<!-- src/views/Job.vue -->
+<!-- src/views/JobItem.vue -->
 <template>
     <div>
       <h1>Item ID: {{ itemId }}</h1>
