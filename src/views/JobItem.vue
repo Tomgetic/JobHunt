@@ -1,12 +1,11 @@
 <!-- src/views/JobItem.vue -->
 <template>
     <div>
-      <h1>Item ID: {{ itemId }}</h1>
+
     </div>
 
     <div v-if="data">
       <!-- Use itemId to fetch or display data -->
-      <strong>Remotive URL (Apenas para Debug): </strong> <a :href="`${data.url}`">{{ data.url }}</a><br>
       <strong>Job: </strong>{{ data.title }}<br>
       <strong>Company: </strong>{{ data.company_name }}<br>
       <strong>Category: </strong>{{ data.category }}<br>

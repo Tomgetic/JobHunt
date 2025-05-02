@@ -1,7 +1,33 @@
 <!-- src/views/HomePage.vue -->
 <template>
-  <section class="max-w-3xl mx-auto text-center py-20">
+  <section class="max-w-7xl mx-auto text-center py-20">
     <h2 class="text-4xl font-bold text-blue-600 mb-4">Available Jobs</h2>
+
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search jobs..."
+      class="border border-gray-300 rounded-lg p-2 mb-4 w-full max-w-md mx-auto"
+    />
+
+    <!-- Filtros -->
+    <label for="location" class=" text-gray-700 mb-2">Location:</label>
+      <select v-model="selectedLocation" class="border border-gray-300 rounded-lg p-2">
+        <option value="">All Locations</option>
+        <option>USA</option>
+        <option>UK</option>
+        <option>Portugal</option>
+        <option>India</option>
+      </select>
+
+    <label for="salary" class=" text-gray-700 mb-2">Salary:</label>
+      <select v-model="selectedSalaryRange" class="border border-gray-300 rounded-lg p-2">
+        <option value="">All Salaries</option>
+        <option value="0-50000">0 - 50,000</option>
+        <option value="50001-100000">50,001 - 100,000</option>
+        <option value="100001-150000">100,001 - 150,000</option>
+        <option value="150001-200000">150,001 - 200,000</option>
+      </select>
 
     <div v-if="loading">
       Loading data...
@@ -10,9 +36,9 @@
       Error loading data: {{ error }}
     </div>
     <div v-else>
-      <h1>{{ data["total-job-count"] }}</h1>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-        <div v-for="item in data.jobs" :key="item.id" class="rounded overflow-hidden shadow-lg flex flex-col">
+      <h1>{{ filteredJobs.length }}</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div v-for="item in filteredJobs" :key="item.id" class="rounded overflow-hidden shadow-lg flex flex-col">
           <a :href="`/job/${item.id}`">
             <div class="relative flex flex-row">
               <div>
@@ -31,7 +57,7 @@
             </div>
             <div class="px-6 py-4 mb-auto">
                 <div
-                    class="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2">{{ item.candidate_required_location }}</div>
+                    class="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out mb-2">{{ item.candidate_required_location }}</div>
                 <div>{{ item.salary }}</div>
             </div>
             <div class="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
@@ -48,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import jsonData from '@/assets/remote-jobs.json';
 
 // Variáveis para manter estado sobre: carregamento (loading), erros (error), e os dados obtidos (data).
@@ -56,6 +82,27 @@ const data = ref(null);
 const loading = ref(true);
 const error = ref(null);
 const cachedData = ref(null); // Para evitar acessos repetidos à API (desaconselhado por remotive.com)
+const searchQuery = ref('');
+const selectedLocation = ref('');
+const selectedSalaryRange = ref('');
+
+// Computed property para filtrar os trabalhos com base na pesquisa.
+const filteredJobs = computed(() => {
+  if (!data.value) return [];
+  return data.value.jobs.filter(job => {
+    const matchName = job.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchLocation = selectedLocation.value ? job.candidate_required_location == selectedLocation.value : true;
+    let matchSalary = true;
+
+    if (selectedSalaryRange.value) {
+      const [min, max] = selectedSalaryRange.value.split('-').map(Number);
+      matchSalary = job.salary >= min && job.salary <= max;
+    }
+
+    return matchName && matchLocation && matchSalary;
+    }
+  );
+});
 
 // Função para obter os dados da API.
 const fetchData = async () => {
