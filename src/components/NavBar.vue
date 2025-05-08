@@ -3,7 +3,7 @@
   <header class="sticky top-0 bg-white shadow-md z-50">
     <nav class="flex items-center justify-between px-6 py-4">
       <div class="flex items-center">
-        <img src="@/assets/logo.png" alt="App Icon" class="w-6 h-6 mr-2">
+        <img src="@/assets/logo.png" alt="App Icon" class="w-6 h-6 mr-2" />
         <h1 class="text-xl font-bold text-blue-600">Job Search</h1>
       </div>
       <ul class="flex gap-6 text-gray-700 font-medium">

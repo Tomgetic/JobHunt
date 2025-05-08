@@ -45,7 +45,7 @@
         <option>Sweden</option>
         <option>Switzerland</option>
         <option>Russia</option>
-        <option>United Kingdom</option>
+        <option>UK</option>
         <option>Ukraine</option>
       </optgroup>
       <optgroup label="Asia">
