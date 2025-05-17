@@ -1,6 +1,84 @@
 @import 'tailwindcss';
 
-/* Optional: custom styles */
+/*
+ * Add new featured to our theme.
+ */
+@theme {
+
+  --font-nunito: "Nunito", "sans-serif";
+
+  --color-offgreen-light: rgb(232, 242, 241);
+  --color-offgreen-dark: rgb(134, 168, 164);
+  --color-offgreen-medium: rgb(134, 168, 164, .5);
+
+  --color-offgreen-100: rgb(214, 225, 224);
+  --color-offgreen-300: rgb(174, 197, 194);
+  --color-offgreen-500: rgb(134, 168, 164);
+  --color-offgreen-700: rgb(85, 118, 114);
+  --color-offgreen-900: rgb(43, 60, 58);
+}
+
+
+/*
+ * Optional: custom styles
+ */
+
 body {
   font-family: 'Nunito', sans-serif; /* Atenção porque fontes precisam de ser importadas em main.css! */
 }
+
+/*
+ * HTML in job descriptions sent by remotive.io API groups is very irregular...
+ * Here we define custom styles for it.
+ * Whe use un umbrella class for it called "job-details".
+ */
+
+/* BEGIN Job description styles */
+
+.job-details .h1, .job-details .h2, .job-details .h3, .job-details .h4 {
+  font-weight: bold;
+}
+
+.job-details p strong {
+  padding-top: 1em;
+  display: inline-block;
+}
+
+.job-details .MsoNormal strong {
+  padding-top: 1em;
+  display: block;
+}
+
+.job-details ul li {
+  padding: 0 0 0 15px;
+  list-style: square inside;
+}
+
+.job-details li {
+  padding: 0 0 0 15px;
+  list-style: square inside;
+}
+
+.job-details li p {
+  display: inline;
+}
+
+.job-details ol li {
+  padding: 0 0 0 15px;
+  list-style: decimal inside !important;
+}
+
+.job-details ol, .job-details ul {
+  padding-bottom: 1em;
+}
+
+.job-details a {
+  color: #0089c7;
+  text-decoration: none;
+}
+
+.job-details a:hover {
+  text-decoration: underline;
+}
+
+/* END Job description styles */
