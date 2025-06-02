@@ -4,12 +4,11 @@
  * Add new featured to our theme.
  */
 @theme {
-
-  --font-nunito: "Nunito", "sans-serif";
+  --font-nunito: 'Nunito', 'sans-serif';
 
   --color-offgreen-light: rgb(232, 242, 241);
   --color-offgreen-dark: rgb(134, 168, 164);
-  --color-offgreen-medium: rgb(134, 168, 164, .5);
+  --color-offgreen-medium: rgb(134, 168, 164, 0.5);
 
   --color-offgreen-100: rgb(214, 225, 224);
   --color-offgreen-300: rgb(174, 197, 194);
@@ -18,13 +17,13 @@
   --color-offgreen-900: rgb(43, 60, 58);
 }
 
-
 /*
  * Optional: custom styles
  */
 
 body {
-  font-family: 'Nunito', sans-serif; /* Atenção porque fontes precisam de ser importadas em main.css! */
+  font-family:
+    'Nunito', sans-serif; /* Atenção porque fontes precisam de ser importadas em main.css! */
 }
 
 /*
@@ -35,7 +34,10 @@ body {
 
 /* BEGIN Job description styles */
 
-.job-details .h1, .job-details .h2, .job-details .h3, .job-details .h4 {
+.job-details .h1,
+.job-details .h2,
+.job-details .h3,
+.job-details .h4 {
   font-weight: bold;
 }
 
@@ -68,7 +70,8 @@ body {
   list-style: decimal inside !important;
 }
 
-.job-details ol, .job-details ul {
+.job-details ol,
+.job-details ul {
   padding-bottom: 1em;
 }
 
