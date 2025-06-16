@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue'
+import AppFooter from './components/AppFooter.vue'
 import { onMounted, ref } from 'vue'
+import type { Ref } from 'vue'
 
-const pageContent = ref(null)
+const pageContent: Ref<HTMLElement | null> = ref(null)
 
 onMounted(() => {
   // Invocado depois da página carregar (mounted) - Desencadeia transição: opacidade de 0 para 100 e desloca na vertical
   requestAnimationFrame(() => {
-    pageContent.value.classList.remove('opacity-0', 'translate-y-4')
-    pageContent.value.classList.add('opacity-100', 'translate-y-0')
+    if (pageContent.value) {
+      pageContent.value.classList.remove('opacity-0', 'translate-y-4')
+      pageContent.value.classList.add('opacity-100', 'translate-y-0')
+    }
   })
 })
 </script>
@@ -28,6 +32,7 @@ onMounted(() => {
     >
       <router-view />
     </main>
+    <AppFooter />
   </div>
 </template>
 
