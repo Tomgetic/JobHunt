@@ -76,7 +76,7 @@
     <div v-if="loading">Loading data...</div>
     <div v-else-if="error">Error loading data: {{ error }}</div>
     <div v-else>
-      <h1>Showing {{ filteredJobs.length }} results</h1>
+      <h1 class="text-xl mb-4">Showing {{ filteredJobs.length }} results</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 items-stretch">
         <div
           v-for="job in paginatedJobs"
