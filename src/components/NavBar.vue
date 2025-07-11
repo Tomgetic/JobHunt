@@ -52,10 +52,10 @@
 
       <!-- CTA Button -->
       <RouterLink
-        to="/some-action"
+        to="/login"
         class="hidden md:inline-block bg-offgreen-500 text-white px-4 py-2 rounded-xl hover:bg-offgreen-700 transition"
       >
-        Some Action
+        Login/Register
       </RouterLink>
 
       <!-- Mobile Menu Button -->
@@ -75,9 +75,9 @@
         <li>
           <RouterLink
             @click="menuOpen = false"
-            to="/some-action"
+            to="/login"
             class="text-blue-600 font-semibold"
-            >Some Action</RouterLink
+            >Login/Register</RouterLink
           >
         </li>
       </ul>

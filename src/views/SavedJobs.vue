@@ -35,7 +35,18 @@
 import { ref, computed, onMounted } from 'vue'
 import jsonData from '@/assets/remote-jobs.json'
 
-const allJobs = ref(jsonData.jobs)
+interface Job {
+  id: string
+  title: string
+  candidate_required_location: string
+  category: string
+}
+
+interface JobsJson {
+  jobs: Job[]
+}
+
+const allJobs = ref<Job[]>((jsonData as JobsJson).jobs)
 const savedIds = ref<string[]>([])
 
 onMounted(() => {
@@ -43,5 +54,5 @@ onMounted(() => {
   if (saved) savedIds.value = JSON.parse(saved)
 })
 
-const savedJobsList = computed(() => allJobs.value.filter((job) => savedIds.value.includes(job.id)))
+const savedJobsList = computed(() => allJobs.value.filter((job: Job) => savedIds.value.includes(job.id)))
 </script>

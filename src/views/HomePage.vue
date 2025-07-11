@@ -18,12 +18,16 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-const pageContent = ref(null)
+import type { Ref } from 'vue'
+
+const pageContent: Ref<HTMLElement | null> = ref(null)
 onMounted(() => {
   // Invoked after the page loads (mounted) - Triggers transition: opacity from 0 to 100 and vertical slide
   requestAnimationFrame(() => {
-    pageContent.value.classList.remove('opacity-0', 'translate-y-4')
-    pageContent.value.classList.add('opacity-100', 'translate-y-0')
+    if (pageContent.value) {
+      pageContent.value.classList.remove('opacity-0', 'translate-y-4')
+      pageContent.value.classList.add('opacity-100', 'translate-y-0')
+    }
   })
 })
 </script>

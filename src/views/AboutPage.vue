@@ -20,10 +20,13 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Target, Settings, Users, Star, Heart, UserCircle, Mail } from 'lucide-vue-next'
+import type { Component } from 'vue'
 
-const icons = {
+type IconName = 'Target' | 'Settings' | 'Users' | 'Star' | 'Heart' | 'UserCircle' | 'Mail'
+
+const icons: Record<IconName, Component> = {
   Target,
   Settings,
   Users,
@@ -33,7 +36,7 @@ const icons = {
   Mail,
 }
 
-const aboutSections = [
+const aboutSections: { title: string; icon: IconName; text: string }[] = [
   {
     title: 'Our Mission',
     icon: 'Target',
