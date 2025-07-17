@@ -40,13 +40,13 @@
           class="group flex flex-col bg-white rounded-lg shadow-md p-3 mb-4 transition-all duration-300 relative hover:shadow-2xl hover:scale-[1.03] cursor-pointer"
         >
           <!-- Make the whole card clickable except the save button -->
-          <a
-            :href="`/job/${job.id}`"
+          <router-link
+            :to="`/job/${job.id}`"
             class="absolute inset-0 z-0"
             style="border-radius: inherit"
             tabindex="-1"
             aria-label="View job details"
-          ></a>
+          ></router-link>
           <div class="flex flex-col h-full relative z-10 pointer-events-none">
             <div class="flex items-start space-x-4">
               <div class="flex-1">
