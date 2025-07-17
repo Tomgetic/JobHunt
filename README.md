@@ -32,7 +32,7 @@ It allows users to browse, search, and apply for jobs, as well as save their fav
    Save interesting jobs to your favourites for later.
 
 6. **Profile:**  
-   Manage your personal information and view your saved jobs in your profile.
+   Manage your personal information in your profile.
 
 ---
 
@@ -68,7 +68,7 @@ Permite aos utilizadores pesquisar, filtrar e candidatar-se a empregos, bem como
    Guarde empregos interessantes nos seus favoritos para consultar mais tarde.
 
 6. **Perfil:**  
-   Gere os seus dados pessoais e veja os empregos guardados no seu perfil.
+   Gere os seus dados pessoais no seu perfil.
 
 ---
 
