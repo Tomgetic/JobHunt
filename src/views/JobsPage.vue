@@ -1,34 +1,43 @@
 <!-- src/views/JobsPage.vue -->
 <template>
-  <section class="max-w-7xl mx-auto text-center py-4">
-    <h2 class="text-4xl font-bold text-offgreen-700 mb-8">Available Jobs</h2>
+  <section class="max-w-7xl mx-auto text-center py-4 px-2">
+    <h2 class="text-3xl sm:text-4xl font-bold text-offgreen-700 mb-6 sm:mb-8">Available Jobs</h2>
 
-    <div class="flex flex-row items-center justify-between mb-8">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search jobs..."
-        class="border border-gray-700 rounded-lg p-2 w-full max-w-md placeholder:text-offgreen-dark/700"
-      />
+    <!-- Responsive filter controls -->
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+      <div class="flex flex-col w-full sm:w-auto">
+        <label class="text-gray-700 mb-1 sm:mb-0 sm:px-6 text-left sm:text-center">Search:</label>
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search jobs..."
+          class="border border-gray-700 rounded-lg p-2 w-full sm:max-w-md placeholder:text-offgreen-dark/700"
+        />
+      </div>
 
-      <!-- This CountrySelect component can be used anywhere we need a country -->
-      <CountrySelect
-        v-model="selectedLocation"
-        :aliases="{ 'United Kingdom': 'UK', 'United States': 'USA' }"
-        label="Location:"
-        labelClass="text-gray-700 px-6"
-        selectClass="border border-gray-700 rounded-lg p-2"
-        wrapperClass="inline"
-        placeholder="Select a country"
-        placeholderClass="text-offgreen-dark/700"
-        optionClass="text-gray-700"
-      />
+      <div class="flex flex-col w-full sm:w-auto">
+        <CountrySelect
+          v-model="selectedLocation"
+          :aliases="{ 'United Kingdom': 'UK', 'United States': 'USA' }"
+          label="Location:"
+          labelClass="text-gray-700 mb-1 sm:mb-0 sm:px-6 text-left sm:text-center"
+          selectClass="border border-gray-700 rounded-lg p-2 w-full"
+          wrapperClass="w-full sm:w-auto"
+          placeholder="Select a country"
+          placeholderClass="text-offgreen-dark/700"
+          optionClass="text-gray-700"
+        />
+      </div>
 
-      <div>
-        <label for="selectedSalaryRange" class="text-gray-700 px-6">Salary:</label>
+      <div class="flex flex-col w-full sm:w-auto">
+        <label
+          for="selectedSalaryRange"
+          class="text-gray-700 mb-1 sm:mb-0 sm:px-6 text-left sm:text-center"
+          >Salary:</label
+        >
         <select
           v-model="selectedSalaryRange"
-          class="border border-gray-700 rounded-lg p-2 text-offgreen-dark/700"
+          class="border border-gray-700 rounded-lg p-2 w-full text-offgreen-dark/700"
         >
           <option class="text-gray-700" value="">All Salaries</option>
           <option class="text-gray-700" value="0-50000">0 - 50,000</option>
@@ -41,7 +50,7 @@
       </div>
     </div>
 
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex flex-col sm:flex-row items-center justify-between mb-4 gap-2">
       <div>
         <label class="mr-2">Jobs per page:</label>
         <select
@@ -76,12 +85,12 @@
     <div v-if="loading">Loading data...</div>
     <div v-else-if="error">Error loading data: {{ error }}</div>
     <div v-else>
-      <h1 class="text-xl mb-4">Showing {{ filteredJobs.length }} results</h1>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 items-stretch">
+      <h1 class="text-lg sm:text-xl mb-4">Showing {{ filteredJobs.length }} results</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-stretch">
         <div
           v-for="job in paginatedJobs"
           :key="job.id"
-          class="group flex flex-col bg-white rounded-lg shadow-md p-3 mb-4 transition-all duration-300 relative hover:shadow-2xl hover:scale-[1.04] cursor-pointer"
+          class="group flex flex-col bg-white rounded-lg shadow-md p-3 mb-2 sm:mb-4 transition-all duration-300 relative hover:shadow-2xl hover:scale-[1.04] cursor-pointer w-full"
         >
           <!-- Make the whole card clickable except the save button -->
           <router-link

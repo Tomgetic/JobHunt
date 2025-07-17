@@ -33,11 +33,11 @@
       <div v-if="savedJobsList.length === 0">
         <p class="text-gray-500">No jobs saved yet.</p>
       </div>
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 items-stretch">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 items-stretch">
         <div
           v-for="job in savedJobsList"
           :key="job.id"
-          class="group flex flex-col bg-white rounded-lg shadow-md p-3 mb-4 transition-all duration-300 relative hover:shadow-2xl hover:scale-[1.03] cursor-pointer"
+          class="group flex flex-col bg-white rounded-lg shadow-md p-3 mb-2 sm:mb-4 transition-all duration-300 relative hover:shadow-2xl hover:scale-[1.03] cursor-pointer w-full"
         >
           <!-- Make the whole card clickable except the save button -->
           <router-link
