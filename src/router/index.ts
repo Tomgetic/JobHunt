@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/HomePage.vue' // or your default view
 import Jobs from '../views/JobsPage.vue'
 import About from '../views/AboutPage.vue'
@@ -22,7 +22,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/JobHunt/'),
+  history: createWebHashHistory('/JobHunt/'),
   routes,
 })
 
