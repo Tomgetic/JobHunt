@@ -6,6 +6,8 @@
       If you have any questions or inquiries, feel free to reach out!
     </p>
     <form @submit.prevent="submitForm" class="bg-white rounded-xl shadow-lg p-8 grid gap-6">
+      <div v-if="errorMsg" class="text-red-600 text-sm mb-2">{{ errorMsg }}</div>
+      <div v-if="successMsg" class="text-green-600 text-sm mb-2">{{ successMsg }}</div>
       <div>
         <label for="name" class="text-base mb-2 block">Name</label>
         <input
@@ -42,7 +44,7 @@
       </div>
       <button
         type="submit"
-        class="inline-flex text-black bg-yellow-200 border border-yellow-200 rounded-full hover:border-black justify-center px-8 py-3"
+        class="inline-flex text-black bg-yellow-200 border border-yellow-200 rounded-full hover:border-black cursor-pointer justify-center px-8 py-3"
       >
         Send
       </button>
@@ -59,8 +61,35 @@ const form = ref({
   message: '',
 })
 
-const submitForm = () => {
-  // Handle form submission
-  console.log('Form submitted:', form.value)
+const successMsg = ref('')
+const errorMsg = ref('')
+
+const submitForm = async () => {
+  successMsg.value = ''
+  errorMsg.value = ''
+
+  // Validate all fields
+  if (!form.value.name || !form.value.email || !form.value.message) {
+    errorMsg.value = 'Please fill in all fields.'
+    return
+  }
+
+  // Simulate sending (replace with your backend endpoint)
+  try {
+    // Example POST request:
+    // await fetch('/api/contact', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(form.value),
+    // })
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)) // Simulate network delay
+    successMsg.value = 'Your message has been sent!'
+    form.value.name = ''
+    form.value.email = ''
+    form.value.message = ''
+  } catch (err) {
+    errorMsg.value = 'Failed to send your message. Please try again later.'
+  }
 }
 </script>

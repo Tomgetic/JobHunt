@@ -7,6 +7,7 @@ import SavedJobs from '../views/SavedJobs.vue'
 import Contact from '../views/ContactPage.vue'
 import Login from '../views/LoginPage.vue'
 import Register from '../views/RegisterPage.vue'
+import Profile from '../views/ProfilePage.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -16,7 +17,8 @@ const routes = [
   { path: '/saved_jobs', name: 'Saved Jobs', component: SavedJobs },
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/login', name: 'Login', component: Login },
-  { path: '/register', name: 'Register', component: Register }
+  { path: '/register', name: 'Register', component: Register },
+  { path: '/profile', name: 'Profile', component: Profile }
 ]
 
 const router = createRouter({

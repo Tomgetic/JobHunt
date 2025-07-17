@@ -1,6 +1,4 @@
 <!-- src/views/AboutPage.vue -->
-<!--  Needs these componentes: npm install @motionone/vue lucide-vue-next -->
-
 <template>
   <section class="max-w-4xl mx-auto px-4 py-16">
     <h1 class="text-4xl font-bold mb-6 text-center">About Us</h1>

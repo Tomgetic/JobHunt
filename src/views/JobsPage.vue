@@ -81,9 +81,17 @@
         <div
           v-for="job in paginatedJobs"
           :key="job.id"
-          class="flex flex-col bg-white rounded-lg shadow-md p-3 mb-4 hover:shadow-lg transition-shadow duration-300 relative"
+          class="group flex flex-col bg-white rounded-lg shadow-md p-3 mb-4 transition-all duration-300 relative hover:shadow-2xl hover:scale-[1.04] cursor-pointer"
         >
-          <div class="flex flex-col h-full">
+          <!-- Make the whole card clickable except the save button -->
+          <a
+            :href="`/job/${job.id}`"
+            class="absolute inset-0 z-0"
+            style="border-radius: inherit"
+            tabindex="-1"
+            aria-label="View job details"
+          ></a>
+          <div class="flex flex-col h-full relative z-10 pointer-events-none">
             <div class="flex items-start space-x-4">
               <div class="flex-1">
                 <!-- Job Icon -->
@@ -94,28 +102,42 @@
                   class="w-12 h-12 rounded-md object-contain"
                 />
 
-                <!-- Save button -->
+                <!-- Save button: pointer-events-auto so it works above the overlay -->
                 <button
-                  :title="isSaved(job.id) ? 'Unsave job' : 'Save job'"
+                  :title="
+                    auth.isLoggedIn
+                      ? isSaved(job.id)
+                        ? 'Unsave job'
+                        : 'Save job'
+                      : 'Login to save jobs'
+                  "
                   @click.stop="toggleSave(job.id)"
+                  :disabled="!auth.isLoggedIn"
                   :class="[
-                    'float-left ms-4 mt-4 text-gray-400 cursor-pointer',
+                    'float-left ms-4 mt-4 text-gray-400 cursor-pointer pointer-events-auto z-20 relative',
                     isSaved(job.id) ? 'text-yellow-500' : 'text-gray-500',
                     isSaved(job.id) ? 'hover:text-gray-500' : 'hover:text-yellow-500',
+                    !auth.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '',
                   ]"
-                  :aria-label="isSaved(job.id) ? 'Unsave job' : 'Save job'"
+                  :aria-label="
+                    auth.isLoggedIn
+                      ? isSaved(job.id)
+                        ? 'Unsave job'
+                        : 'Save job'
+                      : 'Login to save jobs'
+                  "
                 >
                   <Star :size="16" />
                 </button>
               </div>
 
-              <a :href="`/job/${job.id}`" class="flex-1 cursor-pointer">
+              <div class="flex-1">
                 <!-- Job Title -->
                 <h3 class="text-lg font-semibold text-gray-900">{{ job.title }}</h3>
 
                 <!-- Job Location -->
                 <p class="text-sm text-gray-600">{{ job.candidate_required_location }}</p>
-              </a>
+              </div>
             </div>
 
             <!-- Spacer to push footer down -->
@@ -172,7 +194,9 @@ import { ref, onMounted, computed, watch } from 'vue'
 import jsonData from '@/assets/remote-jobs.json'
 import CountrySelect from '@/components/CountrySelect.vue'
 import { Star } from 'lucide-vue-next'
-// import { title } from 'process'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
 
 // Variáveis para manter estado sobre: carregamento (loading), erros (error), e os dados obtidos (data).
 const data = ref(null)
@@ -256,17 +280,16 @@ const paginatedJobs = computed(() => {
 const totalPages = computed(() => Math.ceil(filteredJobs.value.length / pageSize.value))
 
 function toggleSave(jobId: string) {
-  const index = savedJobs.value.indexOf(jobId)
-  if (index === -1) {
-    savedJobs.value.push(jobId)
+  if (!auth.isLoggedIn) return
+  if (auth.isJobSaved(jobId)) {
+    auth.unsaveJob(jobId)
   } else {
-    savedJobs.value.splice(index, 1)
+    auth.saveJob(jobId)
   }
-  localStorage.setItem('savedJobs', JSON.stringify(savedJobs.value))
 }
 
 function isSaved(jobId: string) {
-  return savedJobs.value.includes(jobId)
+  return auth.isJobSaved(jobId)
 }
 
 function parseSalary(salary: string): number | null {

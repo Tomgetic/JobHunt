@@ -20,6 +20,7 @@
     "@heroicons/vue": "^2.2.0",
     "@motionone/vue": "^10.16.4",
     "@tailwindcss/vite": "^4.0.14",
+    "@vueuse/core": "^13.5.0",
     "lucide-vue-next": "^0.510.0",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.1.8",

@@ -1,6 +1,6 @@
 <!-- src/views/LoginPage.vue -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -8,6 +8,12 @@ const email = ref('')
 const password = ref('')
 const auth = useAuthStore()
 const router = useRouter()
+
+onMounted(() => {
+  if (auth.isLoggedIn) {
+    router.replace('/') // Redirect to home if already logged in
+  }
+})
 
 const handleLogin = () => {
   if (auth.login({ email: email.value, password: password.value })) {
@@ -23,13 +29,25 @@ const handleLogin = () => {
       <div v-if="auth.error" class="mb-2 text-red-600 text-sm">{{ auth.error }}</div>
       <div class="mb-4">
         <label for="email" class="block text-sm font-medium mb-1">Email/Username</label>
-        <input v-model="email" type="text" id="email" required class="border border-gray-300 p-2 w-full rounded" />
+        <input
+          v-model="email"
+          type="text"
+          id="email"
+          required
+          class="border border-gray-300 p-2 w-full rounded"
+        />
       </div>
       <div class="mb-4">
         <label for="password" class="block text-sm font-medium mb-1">Password</label>
-        <input v-model="password" type="password" id="password" required class="border border-gray-300 p-2 w-full rounded" />
+        <input
+          v-model="password"
+          type="password"
+          id="password"
+          required
+          class="border border-gray-300 p-2 w-full rounded"
+        />
       </div>
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded cursor-pointer transition">Login</button>
     </form>
   </div>
 </template>

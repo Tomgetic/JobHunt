@@ -32,16 +32,30 @@
                     }}</span>
                   </div>
                   <button
-                    :title="isSaved(data.id) ? 'Unsave job' : 'Save job'"
+                    :title="
+                      auth.isLoggedIn
+                        ? isSaved(data.id)
+                          ? 'Unsave job'
+                          : 'Save job'
+                        : 'Login to save jobs'
+                    "
                     @click.stop="toggleSave(data.id)"
+                    :disabled="!auth.isLoggedIn"
                     :class="[
-                      'ms-0 mt-1 text-gray-400 cursor-pointer',
+                      'float-left ms-4 mt-4 text-gray-400 cursor-pointer',
                       isSaved(data.id) ? 'text-yellow-500' : 'text-gray-500',
                       isSaved(data.id) ? 'hover:text-gray-500' : 'hover:text-yellow-500',
+                      !auth.isLoggedIn ? 'opacity-50 cursor-not-allowed' : '',
                     ]"
-                    :aria-label="isSaved(data.id) ? 'Unsave job' : 'Save job'"
+                    :aria-label="
+                      auth.isLoggedIn
+                        ? isSaved(data.id)
+                          ? 'Unsave job'
+                          : 'Save job'
+                        : 'Login to save jobs'
+                    "
                   >
-                    <Star :size="20" />
+                    <Star :size="16" />
                   </button>
                 </div>
               </div>
@@ -94,11 +108,18 @@
         <!-- Application Form-->
         <div class="mx-12">
           <h3 class="text-xl font-bold">Apply for this job</h3>
-          <form class="my-5">
+          <div v-if="!auth.isLoggedIn" class="mb-8 text-center text-red-600 font-semibold">
+            You must be logged in to apply for this job.
+            <router-link to="/login" class="underline text-blue-700 ml-2">Login</router-link>
+          </div>
+          <form v-else class="my-5" @submit="handleApply">
+            <div v-if="errorMsg" class="mb-2 text-red-600 text-sm">{{ errorMsg }}</div>
+            <div v-if="successMsg" class="mb-2 text-green-600 text-sm">{{ successMsg }}</div>
             <div class="grid md:grid-cols-2 gap-6">
               <div>
                 <label class="text-base mb-2 block">First Name</label>
                 <input
+                  v-model="firstName"
                   type="text"
                   placeholder="First Name"
                   autocomplete="false"
@@ -109,6 +130,7 @@
               <div>
                 <label class="text-base mb-2 block">Last Name</label>
                 <input
+                  v-model="lastName"
                   type="text"
                   placeholder="Last Name"
                   autocomplete="false"
@@ -119,6 +141,7 @@
               <div>
                 <label for="email_address" class="text-base mb-2 block">Email Address</label>
                 <input
+                  v-model="email"
                   id="email_address"
                   type="email"
                   placeholder="you@company.com"
@@ -130,6 +153,7 @@
               <div>
                 <label for="phone" class="text-base mb-2 block">Phone Number</label>
                 <input
+                  v-model="phone"
                   id="phone"
                   type="text"
                   placeholder="Phone Number"
@@ -141,6 +165,7 @@
               <div>
                 <label for="email_address" class="text-base mb-2 block">Address</label>
                 <input
+                  v-model="address"
                   type="text"
                   placeholder="Full Address"
                   autocomplete="false"
@@ -163,6 +188,7 @@
               <div class="md:col-span-2">
                 <label for="email_address" class="text-base mb-2 block">Cover Letter</label>
                 <textarea
+                  v-model="coverLetter"
                   placeholder="Cover Letter"
                   class="w-full px-4 py-3 border-2 placeholder:text-offgreen-dark/50 rounded-md outline-none h-36 focus:ring-4 border-offgreen-medium focus:border-offgreen-dark ring-gray-100"
                   name="cover"
@@ -170,23 +196,62 @@
               </div>
             </div>
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mt-5">
-              <div>
-                <span class="text-sm sr-only font-bold">Attach Resume</span>
-                <input
-                  type="file"
-                  class="w-full mt-1"
-                  placeholder="Upload Resume"
-                  name="resume"
-                  accept="application/pdf,.doc,.docx"
-                />
+              <div class="flex flex-col">
+                <label class="text-base font-semibold mb-2 flex items-center gap-2">
+                  <svg
+                    class="w-5 h-5 text-offgreen-dark"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                  </svg>
+                  Attach Resume <span class="text-xs text-gray-500 ml-2">(PDF, DOC, DOCX)</span>
+                </label>
+                <div
+                  class="border border-gray-300 rounded-lg px-4 py-3 flex items-center gap-3 bg-gray-50"
+                >
+                  <input
+                    ref="resumeInput"
+                    id="resume"
+                    type="file"
+                    name="resume"
+                    accept="application/pdf,.doc,.docx"
+                    class="hidden"
+                    @change="onResumeChange"
+                  />
+                  <!-- prettier-ignore -->
+                  <button
+                    type="button"
+                    class="inline-flex text-black bg-yellow-200 border border-yellow-200 rounded-full hover:border-black cursor-pointer justify-center px-8 py-3"
+                    @click="$refs.resumeInput.click()"
+                  >
+                    Browse...
+                  </button>
+                  <span v-if="resumeFileName" class="text-sm text-gray-700 ml-2">{{
+                    resumeFileName
+                  }}</span>
+                  <button
+                    v-if="resumeFileName"
+                    type="button"
+                    class="ml-2 px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs cursor-pointer transition"
+                    @click="clearResume"
+                  >
+                    Clear
+                  </button>
+                </div>
               </div>
+              <!-- prettier-ignore -->
               <button
                 type="submit"
-                class="inline-flex text-black bg-yellow-200 border border-yellow-200 rounded-full hover:border-black justify-center px-8 py-3"
+                class="inline-flex text-black bg-yellow-200 border border-yellow-200 rounded-full hover:border-black cursor-pointer justify-center px-8 py-3"
               >
                 Apply Job
               </button>
             </div>
+            <div v-if="errorMsg" class="mt-4 text-red-600 text-sm">{{ errorMsg }}</div>
+            <div v-if="successMsg" class="mt-4 text-green-600 text-sm">{{ successMsg }}</div>
           </form>
         </div>
       </div>
@@ -201,11 +266,26 @@ import { ref, onMounted } from 'vue'
 import jsonData from '@/assets/remote-jobs.json'
 import CountrySelect from '@/components/CountrySelect.vue'
 import { Star } from 'lucide-vue-next'
+import { useAuthStore } from '@/stores/auth'
 
+const auth = useAuthStore()
 const route = useRoute()
-const itemId = route.params.id // Obter id passado como parâmetro no URL
+const itemId = route.params.id
 const data = ref(null)
-const savedJobs = ref<string[]>([])
+const resumeFileName = ref('')
+const errorMsg = ref('')
+const successMsg = ref('')
+
+// Form fields
+const firstName = ref('')
+const lastName = ref('')
+const email = ref('')
+const phone = ref('')
+const address = ref('')
+const country = ref('')
+const coverLetter = ref('')
+const resumeFile = ref<File | null>(null)
+const BLOCK_DAYS = 7
 
 function timeAgo(date) {
   const now = new Date()
@@ -231,21 +311,126 @@ function timeAgo(date) {
 }
 
 function toggleSave(jobId: string) {
-  const index = savedJobs.value.indexOf(jobId)
-  if (index === -1) {
-    savedJobs.value.push(jobId)
+  if (!auth.isLoggedIn) return
+  if (auth.isJobSaved(jobId)) {
+    auth.unsaveJob(jobId)
   } else {
-    savedJobs.value.splice(index, 1)
+    auth.saveJob(jobId)
   }
-  localStorage.setItem('savedJobs', JSON.stringify(savedJobs.value))
 }
 
 function isSaved(jobId: string) {
-  return savedJobs.value.includes(jobId)
+  return auth.isJobSaved(jobId)
+}
+
+function onResumeChange(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  resumeFile.value = file || null
+  resumeFileName.value = file ? file.name : ''
+}
+
+function clearResume() {
+  resumeFile.value = null
+  resumeFileName.value = ''
+  if ($refs.resumeInput) {
+    ;($refs.resumeInput as HTMLInputElement).value = ''
+  }
+}
+
+function getBlockKey() {
+  // Use user email and job id as a unique key
+  return `applied_${email.value || auth.user?.email || 'guest'}_${itemId}`
+}
+
+function isBlocked() {
+  const key = getBlockKey()
+  const lastApplied = localStorage.getItem(key)
+  if (!lastApplied) return false
+  const last = new Date(parseInt(lastApplied, 10))
+  const now = new Date()
+  const diffDays = (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24)
+  return diffDays < BLOCK_DAYS
+}
+
+async function handleApply(e: Event) {
+  e.preventDefault()
+  errorMsg.value = ''
+  successMsg.value = ''
+
+  // Check block
+  if (isBlocked()) {
+    errorMsg.value = `You have already applied for this job. Please wait ${BLOCK_DAYS} days before applying again.`
+    successMsg.value = ''
+    return
+  }
+
+  // Validate all fields
+  if (
+    !firstName.value ||
+    !lastName.value ||
+    !email.value ||
+    !phone.value ||
+    !address.value ||
+    !country.value ||
+    !coverLetter.value ||
+    !resumeFile.value
+  ) {
+    errorMsg.value = 'Please fill in all fields and attach your resume.'
+    successMsg.value = ''
+    return
+  }
+
+  // Validate phone number (only digits allowed)
+  if (!/^\d+$/.test(phone.value)) {
+    errorMsg.value = 'Please enter a valid phone number (digits only).'
+    successMsg.value = ''
+    return
+  }
+
+  // Prepare form data
+  const formData = new FormData()
+  formData.append('first_name', firstName.value)
+  formData.append('last_name', lastName.value)
+  formData.append('email', email.value)
+  formData.append('phone', phone.value)
+  formData.append('address', address.value)
+  formData.append('country', country.value)
+  formData.append('cover_letter', coverLetter.value)
+  formData.append('resume', resumeFile.value)
+
+  // Send to backend (replace URL with your endpoint)
+  try {
+    // Example POST request (replace with your API endpoint)
+    // const response = await fetch('/api/apply', {
+    //   method: 'POST',
+    //   body: formData,
+    // })
+    // if (!response.ok) throw new Error('Failed to submit application')
+    // successMsg.value = 'Application submitted successfully!'
+
+    // Simulate success for demo:
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    successMsg.value = 'Application submitted successfully!'
+    errorMsg.value = ''
+    // Block further submissions for this job/user
+    localStorage.setItem(getBlockKey(), Date.now().toString())
+    // Optionally clear form
+    firstName.value = ''
+    lastName.value = ''
+    email.value = ''
+    phone.value = ''
+    address.value = ''
+    country.value = ''
+    coverLetter.value = ''
+    clearResume()
+  } catch (err) {
+    errorMsg.value = 'Failed to submit application.'
+    successMsg.value = ''
+    // Do NOT set the block key or clear the form
+  }
 }
 
 onMounted(() => {
-  // Procurar ID no array jsonData.jobs.
   const job = jsonData.jobs.find((job) => job.id == itemId)
   if (job) {
     job.description = job.description
@@ -255,7 +440,7 @@ onMounted(() => {
       .replace(/%22/g, '"')
     data.value = job
   }
-  const saved = localStorage.getItem('savedJobs')
-  if (saved) savedJobs.value = JSON.parse(saved)
+  // Do NOT show the block message on mount.
+  // Only show it after a successful submission or when submitting.
 })
 </script>

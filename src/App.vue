@@ -1,8 +1,15 @@
+<!-- src/App.vue -->
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue'
 import AppFooter from './components/AppFooter.vue'
+import { useAuthStore } from '@/stores/auth'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
+
+const auth = useAuthStore()
+onMounted(() => {
+  auth.loadUser()
+})
 
 const pageContent: Ref<HTMLElement | null> = ref(null)
 
@@ -18,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen flex flex-col bg-gray-100">
     <!-- Navbar as a component -->
     <NavBar />
 
@@ -28,7 +35,7 @@ onMounted(() => {
     -->
     <main
       ref="pageContent"
-      class="opacity-0 translate-y-4 transition-all duration-1000 ease-out p-6"
+      class="flex-1 opacity-0 translate-y-4 transition-all duration-1000 ease-out p-6"
     >
       <router-view />
     </main>
