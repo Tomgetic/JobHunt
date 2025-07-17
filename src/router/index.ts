@@ -18,11 +18,11 @@ const routes = [
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
-  { path: '/profile', name: 'Profile', component: Profile }
+  { path: '/profile', name: 'Profile', component: Profile },
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/JobHunt/'),
   routes,
 })
 
