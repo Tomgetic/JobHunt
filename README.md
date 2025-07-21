@@ -1,5 +1,9 @@
 # JobHunt
 
+https://tomgetic.github.io/JobHunt/
+
+---
+
 ## 🇬🇧 English (UK)
 
 **JobHunt** is a modern job search platform built with Vue.js and Tailwind CSS.  
