@@ -8,8 +8,8 @@
         <div><span class="font-semibold">Address:</span> Example, Lisbon, Portugal</div>
         <div>
           <span class="font-semibold">Email:</span>
-          <a href="mailto:contact@jobhunt.com" class="hover:underline text-blue-300"
-            > contact@jobhunt.com</a
+          <a href="mailto:contact@jobhunt.com" class="hover:underline text-blue-300">
+            contact@jobhunt.com</a
           >
         </div>
       </div>
